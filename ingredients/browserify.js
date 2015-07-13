@@ -38,10 +38,13 @@ var getDestination = function(output) {
  * @param {object}       options
  */
 var browserifyStream = function(data) {
-    var stream = browserify(data.src, data.options);
 
-    stream.transform(babelify, { stage: 0 });
-    stream.transform(partialify);
+    data.options.transform = data.options.transform || [
+        [babelify, { stage: 0 }],
+        partialify
+    ];
+
+    var stream = browserify(data.src, data.options);
 
     return stream;
 };
